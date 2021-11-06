@@ -1,4 +1,3 @@
-require('dotenv').config();
 const uuid = require("uuid");
 const dynamoClient = require('../db');
 const TableName = process.env.TABLE_NAME;

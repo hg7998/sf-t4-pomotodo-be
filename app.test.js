@@ -1,13 +1,12 @@
-require('dotenv').config();
-const dynamoClient = require("./db");
-const TableName = process.env.TABLE_NAME;
-
 const request = require("supertest");
 const todoDataService = require("./services/TodoDataService");
 const App = require("./app");
 const app = new App();
 
-describe("Test public routes", () => {
+const dynamoClient = require("./db");
+const TableName = process.env.TABLE_NAME;
+
+xdescribe("Test public routes", () => {
   beforeEach(async () => {
     await dynamoClient.delete({ TableName, Key: { id: "0" } }).promise();
   });
