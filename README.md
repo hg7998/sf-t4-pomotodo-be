@@ -8,7 +8,7 @@
 - `npm install`
 
 ## Usage
-1. Create a DynamoDB table called "tododata" with a Primary Key: "tododata" as String
+1. Create a DynamoDB table called "tododata" with a Primary Key: "id" as String
 1. Create a .env file with the following values
   ```
   PORT=5000
