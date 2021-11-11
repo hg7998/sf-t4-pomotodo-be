@@ -3,8 +3,10 @@
 ## Requirements
 - node (tested with versions 10+)
 - AWS account with DynamoDB and IAM role with Programmatic Access
+- Serverless Framework CLI
 
 ## Installation
+- `npm install serverless` or `npm install -g serverless` (global local install)
 - `npm install`
 
 ## Usage
@@ -17,23 +19,24 @@
   AWS_SECRET_ACCESS_KEY=****************
   AWS_DEFAULT_REGION=****************
   ```
-- `npm start`
+- `npm start` to start the server
+- `serverless deploy` to deploy the Lambda wrapped Express app to AWS
 
 ## Stories and Acceptance Criteria
 ### Example TODO body
 
 ```json
 {
+  "id" :0
   "order": [
     "57f78108-4704-41a9-989b-3721ceedfad1"
   ],
-  todos: {
+  "todos": {
     "57f78108-4704-41a9-989b-3721ceedfad1": {
       "name": "Add entry",
       "desc": "Personal log",
       "dateCreated": "1622077232207",
       "dateCompleted": "1622077232208",
-      "tags": ["caput"],
       "pomodoroCount": 2
     }
   }
@@ -67,7 +70,6 @@ Request Body:
 {
   "name": "Add entry",
   "desc": "Personal log",
-  "tags": ["caput"],
 }
 ```
 
@@ -83,8 +85,7 @@ Response Body:
       "name": "Add entry",
       "desc": "Personal log",
       "dateCreated": "1622077232207",
-      "dateCompleted": null,
-      "tags": ["caput"],
+      "dateCompleted": "null",
       "pomodoroCount": 0
     }
   }
@@ -114,21 +115,19 @@ Response Body:
         "name": "Add entry",
         "desc": "Personal log",
         "dateCreated": "1622077232207",
-        "dateCompleted": null,
-        "tags": ["caput"],
+        "dateCompleted": "null",
         "pomodoroCount": 0
       },
       "21f3e843-b7c0-4ddb-8df4-0111117bf2d8": {
         "name": "Rep Building",
         "desc": "Physical Training",
         "dateCreated": "1622077232209",
-        "dateCompleted": null,
-        "tags": ["manu"],
+        "dateCompleted": "null",
         "pomodoroCount": 0
       }
-    }
   }
 }
+
 ```
 ---
 As a user I want to update the order of my todos
@@ -183,23 +182,6 @@ Request Body:
 {
   "name": "WORKOUTMOAR",
   "desc": "Physical Training",
-}
-```
-
-As a user I want to be able to tag my todo multiple times
-
-    Given I have saved a todo
-    When I add a tag or another
-    Then my todo has the saved tags
-
-PATCH /api/todo-data/{todo-id}
-204 No Content
-
-
-Request Body:
-```json
-{
-  "tags": ["moar", "tags"]
 }
 ```
 
