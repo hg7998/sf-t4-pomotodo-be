@@ -62,14 +62,26 @@ module.exports = class TodoDataService {
           TableName,
           Item: existingTodoData,
         }
-        // ...
 
+        await dynamoClient.put(params)
+        .promise()
+        .then((data) => {
+           console.log(data);
+         })
+        .catch((err) => {
+           console.log(err);
+         });
+        let newItem = await this.getTodos();
+        console.log(newItem)
+        return newItem;
+        
         // Return the newly created tododata item
       }
     } catch (error) {
       console.error(error);
       return error;
     }
+   
   }
 
   static async getTodos() {
@@ -106,15 +118,17 @@ module.exports = class TodoDataService {
         Key: {
           id: "0"
         },
-        // UpdateExpression: ...
-        // ExpressionAttributeNames: {
-        //   ...
-        // },
-        // ExpressionAttributeValues: {
-        //   ...
-        // },
-      }
+        UpdateExpression: 'set #updatedOrder = :newOrder',
+        ExpressionAttributeNames: {
+          '#updatedOrder' : "order"
+        },
+        ExpressionAttributeValues: {
+          ":newOrder": options.order
+        }
 
+      }
+      await dynamoClient.update(params).promise()
+      return this.getTodos
       // Update the tododata item
     } catch (error) {
       console.error(error);

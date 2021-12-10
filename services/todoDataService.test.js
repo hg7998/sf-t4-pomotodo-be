@@ -24,7 +24,7 @@ describe("TodoData Service", () => {
   });
 
   // remove the 'x' before 'it' to "turn on" the test
-  xit("returns all the todo-data saved", async () => {
+  it("returns all the todo-data saved", async () => {
     const todo1 = {
       name: "Add entry",
       desc: "Personal log",
@@ -45,7 +45,7 @@ describe("TodoData Service", () => {
     expect(actual.order.length).toEqual(2);
   });
 
-  xit("updates the todo order", async () => {
+  it("updates the todo order", async () => {
     const todo1 = {
       name: "Add entry",
       desc: "Personal log",
