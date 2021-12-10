@@ -19,6 +19,7 @@ describe("TodoData Service", () => {
     };
 
     const actual = await todoDataService.addTodo(todoData);
+    // console.log(actual);
     expect(actual.order.length).toBe(1);
   });
 

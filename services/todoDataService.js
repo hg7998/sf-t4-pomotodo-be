@@ -18,7 +18,9 @@ module.exports = class TodoDataService {
 
     try {
       // Check the "tododata" table for existing a tododata item
-      // let existingTodoData = ...
+      let existingTodoData = await dynamoClient.scan(params).promise().then((data) => {
+        return data;
+      });
       
       // no tododata exists yet
       if (existingTodoData.Items.length === 0) {
@@ -35,10 +37,22 @@ module.exports = class TodoDataService {
           TableName,
           Item: newTodoData,
         }
-        // ...
+    
+        await dynamoClient.put(params)
+        .promise()
+        .then((data) => {
+           console.log(data);
+         })
+        .catch((err) => {
+           console.log(err);
+         });
 
         // Return the newly created tododata item
-      } else { // a tododata item already exist
+         let newItem = this.getTodos();
+
+         return newItem;
+
+        } else { // a tododata item already exist
         existingTodoData = existingTodoData.Items[0];
         existingTodoData.order.push(id);
         existingTodoData.todos[id] = todo;
