@@ -48,7 +48,7 @@ module.exports = class TodoDataService {
          });
 
         // Return the newly created tododata item
-         let newItem = this.getTodos();
+         let newItem = await this.getTodos();
 
          return newItem;
 
@@ -80,12 +80,23 @@ module.exports = class TodoDataService {
           id: "0"
         }
       }
+    
+      return dynamoClient.get(params)
+      .promise()
+      .then((data) => {
+         console.log(data);
+         return data.Item;
+       })
+      .catch((err) => {
+         console.log(err);
+       });
 
       // Check the "tododata" table for the tododata item, and return it
     } catch (error) {
       console.error(error);
       return error;
     }
+    
   }
 
   static async updateOrder(options) {
