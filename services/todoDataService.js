@@ -40,9 +40,6 @@ module.exports = class TodoDataService {
     
         await dynamoClient.put(params)
         .promise()
-        .then((data) => {
-           console.log(data);
-         })
         .catch((err) => {
            console.log(err);
          });
@@ -65,14 +62,10 @@ module.exports = class TodoDataService {
 
         await dynamoClient.put(params)
         .promise()
-        .then((data) => {
-           console.log(data);
-         })
         .catch((err) => {
            console.log(err);
          });
         let newItem = await this.getTodos();
-        console.log(newItem)
         return newItem;
         
         // Return the newly created tododata item
@@ -96,7 +89,6 @@ module.exports = class TodoDataService {
       return dynamoClient.get(params)
       .promise()
       .then((data) => {
-         console.log(data);
          return data.Item;
        })
       .catch((err) => {
@@ -125,11 +117,17 @@ module.exports = class TodoDataService {
         ExpressionAttributeValues: {
           ":newOrder": options.order
         }
-
       }
-      await dynamoClient.update(params).promise()
-      return this.getTodos
-      // Update the tododata item
+      
+      await dynamoClient.update(params)
+      .promise()
+      .then((data) => {
+         console.log(data);
+       })
+      .catch((err) => {
+         console.log(err);
+      });
+    
     } catch (error) {
       console.error(error);
       return error;
@@ -141,41 +139,33 @@ module.exports = class TodoDataService {
       let params = {
         TableName,
         Key: {
-          id: id
+          id: "0",
         },
-      }
-
-      // Check the "tododata" table for the tododata item, and set it to "existingTodo"
-      // let existingTodo = ...
-
-      let existingTodo = await dynamoClient.scan(params).promise().then((data) => {
-        console.log(data.Items[0])
-        return data.Items[0];
-      });
-      
-      for (let key in options) {
-        existingTodo.todos[id][key] = options[key];
-      }
-
-      params = {
-        TableName,
-        Item: {
-          ...existingTodo
+        UpdateExpression: `set todos.#existingID.#newName = :newName, todos.#existingID.dateCompleted = :dateCompleted`, 
+        ExpressionAttributeNames: {
+          "#existingID": id,
+          "#newName": "name",
         },
-        UpdateExpression: 'set name = :name, dateCompleted = :dateCompleted',
         ExpressionAttributeValues: {
-          ":name": options.name,
-          ":dateCompleted" : options.dateCompleted
+          ":newName": options.name,
+          ":dateCompleted": options.dateCompleted,
         }
       }
-      await dynamoClient.update(params).promise()
-      // Replace the existing tododata item with the updated one
+
+      await dynamoClient.update(params)
+      .promise()
+      .then((data) => {
+         console.log(data);
+       })
+      .catch((err) => {
+         console.log(err);
+      });
 
     } catch (error) {
       console.error(error);
       return error;
     }
-  }
+}
 
   static async deleteTodo(id) {
     try {
